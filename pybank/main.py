@@ -4,100 +4,109 @@
 # ------------------------------------------------------------------------------------------------
 import os
 import csv
+from statistics import mean 
 
 # ------------------------------------------------------------------------------------------------
-# Create a path (to tell Python where the file is, like a pointer)
+# Create a path (to tell Python where the file is, like a pointer), you can call it whatever you
+# want, even when I chose 'csvpath' for clarity. 
 # ------------------------------------------------------------------------------------------------
-
 csvpath = os.path.join('resources','budget_data.csv')
 
+# with open(csvpath, 'r') as csv_file:
+#     csv_reader = csv.reader(csv_file, delimiter=',')
+    
+#     for line in csv_reader:
+#         print(line)
+#         # QQ you can also use print(line[1]) if you want only the second columns
+#         # QQ if you want to get rid of the header, before the 'for loop' you have to add
+#         # the 'next' function which will need the file name as a parameter
+#         # for example: next(csv_reader)
+
+
+print('Financial Analysis')
+print('- - - - - - - - - - - - - - - - - - - - - - ')
 
 # Open the CSV module and read the file 
-with open(csvpath) as csvfile:
+with open(csvpath, 'r') as csv_file:
     # CSV reader specifies delimiter and variable that holds contents
-    csvreader = csv.reader(csvfile, delimiter=',')
-    #print(csvreader)
+    csv_reader = csv.reader(csv_file, delimiter=',')
+    #print(csv_reader)
 
-    #Read the first row as the header (QQ: no more syntax error, nice!)
-    csv_header = next(csvreader)
-    #print(f'CSV Header: {csv_header}')
+    # Read the first row as the header
+    #header = next(csv_reader)
+    #print(f'CSV Header: {header}')
 
-    # The total number of months included in the dataset
-    month_count = len(list(csvreader))
-    #print(month_count)
+    # Skip the header
+    next(csv_reader)
 
-    # pl_list = list(csvreader)
-    # print(pl_list)
+    # ------------------------------------------------------------------------------------------------
+    # Get the total number of months included in the dataset
+    # ------------------------------------------------------------------------------------------------
+    month_count = len(list(csv_reader))
+    print(f'Total Months: {month_count}')
 
+# ------------------------------------------------------------------------------------------------
 # The net total amount of "Profit/Losses" over the entire period
-with open(csvpath) as csvfile:
-    csvreader = csv.reader(csvfile, delimiter=',')
-    csv_header = next(csvreader)
-
-    headerline = csvfile.next()
-    total = 0
-    for row in csv.reader(csvfile):
-        total += int(row[1])
-    print(total)
+# ------------------------------------------------------------------------------------------------
+with open(csvpath, 'r') as csv_file:
+    csv_reader = csv.reader(csv_file, delimiter=',')
+    next(csv_reader)
+    num_before = next(csv_reader)
+    total = int(num_before[1])
     
-    # row_count = 0
-    # # column_value = 0
-    # # sum_values_column = 0
-
-    # for row in csvreader:
-    #     row_count += int(row[1])
-    # print(row_count)
-        
-    #     column_value = int(row[1])
-    #     sum_values_column = (sum_values_column + column_value)
+    for line in csv_reader:
+        total = total + int(line[1]) 
     
-    # print(sum_values_column)
-
-    # def sumRows(filename, header=False):
-    # d ={}
-    # with open(filename) as csvfile:
-    #     headerline = csvfile.next()
-    #     total = 0
-    #     for row in csv.reader(csvfile):
-    #         total += int(row[1])
-    #     print(total)
-
-
-
-    # row_list = []
-    # #profit_value = 0
-    # #profit_value_accumulated = 0
-
-    # for row in csvreader:
-    #     row_count += 1
-    #     row_list.append(row_count)
-
-    #     #profit_value = int(row[1])
-    #     # profit_value_accumulated = (profit_value_accumulated + profit_value)
-    #     print(row_list)
+    print('Total: ' + str('${:,.2f}'.format(total)))
 
 
 # ------------------------------------------------------------------------------------------------
-# Now that the importing of the CSV file is done, the actual activity is the following:
-# Your task is to create a Python script that analyzes the records to calculate each of the following:
-
-
 # The average of the changes in "Profit/Losses" over the entire period
-# The greatest increase in profits (date and amount) over the entire period
+# ------------------------------------------------------------------------------------------------
+with open(csvpath, 'r') as csv_file:
+    csv_reader = csv.reader(csv_file, delimiter=',')
+    next(csv_reader)
+    num_before = next(csv_reader)
+    change_list = []
+    
+    for line in csv_reader:
+        difference = int(line[1])-int(num_before[1])
+        change_list.append(difference)
+    
+    print('Average Change: ' + str('${:,.2f}'.format(round(mean(change_list)))))
+
+# ------------------------------------------------------------------------------------------------
+# The greatest increase in profits (date and amount) over the entire period, and 
 # The greatest decrease in losses (date and amount) over the entire period
 # ------------------------------------------------------------------------------------------------
+with open(csvpath, 'r') as csv_file:
+    csv_reader = csv.reader(csv_file, delimiter=',')
+    next(csv_reader)
+    num_before = next(csv_reader)
+    amount_list = []
+    
+    for line in csv_reader:
+        number = int(line[1])
+        amount_list.append(number)
+    
+    #print(amount_list)
+    new_list = sorted(amount_list, reverse=True)
+    # for i in new_list:
+    #     print(i)
 
-# Create a list to append the information that will be retrieved later 
-#months_list = []
+    maximum_value = max(amount_list)
+    minimum_value = min(amount_list)
+    #print(minimum_value)
+
+    print('Greatest Increase in Profits: ' + '${:,.2f}'.format(maximum_value))
+    print('Greates Decrease in Profits: ' + '${:,.2f}'.format(minimum_value)) 
+    print('- - - - - - - - - - - - - - - - - - - - - - ')
 
 
+# ------------------------------------------------------------------------------------------------
+# Final step, print the analysis to the terminal and export a text file with the results
+# ------------------------------------------------------------------------------------------------
+# output_path = os.path.join('pybank_analysis.csv')
 
-
-
-
-
-
-
-
-
-
+# with open(output_path, 'w') as csvfile:
+#     ldslfj
