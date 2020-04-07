@@ -65,14 +65,24 @@ with open(csvpath, 'r') as csv_file:
 # ------------------------------------------------------------------------------------------------
 with open(csvpath, 'r') as csv_file:
     csv_reader = csv.reader(csv_file, delimiter=',')
-    next(csv_reader)
-    num_before = next(csv_reader)
+    #header = next(csv_reader)
+    first_row = next(csv_reader)
+    #num_before = int(first_row[1])
     change_list = []
+    current_row = 0
+    diff_value = 0
+    previous_numb = 0
     
     for line in csv_reader:
-        difference = int(line[1])-int(num_before[1])
-        change_list.append(difference)
-    
+        current_row += 1
+        if current_row == 1:
+            previous_numb = int(line[1])
+        else:
+            diff_value = int(line[1]) - previous_numb
+            previous_numb = int(line[1])
+            change_list.append(diff_value)
+
+    #print(change_list)
     print('Average Change: ' + str('${:,.2f}'.format(round(mean(change_list)))))
 
 # ------------------------------------------------------------------------------------------------
@@ -82,7 +92,7 @@ with open(csvpath, 'r') as csv_file:
 with open(csvpath, 'r') as csv_file:
     csv_reader = csv.reader(csv_file, delimiter=',')
     next(csv_reader)
-    num_before = next(csv_reader)
+    #num_before = next(csv_reader)
     amount_list = []
     
     for line in csv_reader:
@@ -94,14 +104,38 @@ with open(csvpath, 'r') as csv_file:
     # for i in new_list:
     #     print(i)
 
-    maximum_value = max(amount_list)
-    minimum_value = min(amount_list)
-    #print(minimum_value)
+maximum_value = max(amount_list)
+minimum_value = min(amount_list)
+#print(minimum_value)
+best_month = ''
+worst_month = ''
 
-    print('Greatest Increase in Profits: ' + '${:,.2f}'.format(maximum_value))
-    print('Greates Decrease in Profits: ' + '${:,.2f}'.format(minimum_value)) 
-    print('- - - - - - - - - - - - - - - - - - - - - - ')
+with open(csvpath, 'r') as csv_file:
+    csv_reader = csv.reader(csv_file)
 
+    for line in csv_reader:
+        if line[1]== maximum_value:
+            best_month = (line[0])
+
+
+with open(csvpath, 'r') as csv_file:
+    csv_reader = csv.reader(csv_file)
+
+    for line in csv_reader:
+        if line[1] == minimum_value:
+            worst_month = (line[0])
+
+
+print(best_month)
+print(worst_month)
+print('Greatest Increase in Profits: ' + str(best_month) + '   ' + '${:,.2f}'.format(maximum_value))
+print('Greates Decrease in Profits: ' + str(worst_month) + '   ' + '${:,.2f}'.format(minimum_value)) 
+print('- - - - - - - - - - - - - - - - - - - - - - ')
+
+# Note for the reviewer: please note that the maximum amount in the list is
+# 1179593, and not 1926159 as it is is the example code. I triple checked and
+# I'm sure my results are right, so I don't know why it is different to the
+# solution proposed. It would be nice to know where the difference is. Thanks. 
 
 # ------------------------------------------------------------------------------------------------
 # Final step, print the analysis to the terminal and export a text file with the results
