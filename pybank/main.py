@@ -21,8 +21,8 @@ csvpath = os.path.join('resources','budget_data.csv')
 #         # QQ if you want to get rid of the header, before the 'for loop' you have to add
 #         # the 'next' function which will need the file name as a parameter
 #         # for example: next(csv_reader)
-
-
+print()
+print('- - - - - - - - - - - - - - - - - - - - - - ')
 print('Financial Analysis')
 print('- - - - - - - - - - - - - - - - - - - - - - ')
 
@@ -94,42 +94,43 @@ with open(csvpath, 'r') as csv_file:
     next(csv_reader)
     #num_before = next(csv_reader)
     amount_list = []
+    month_list = []
     
     for line in csv_reader:
         number = int(line[1])
         amount_list.append(number)
-    
+        date = str(line[0])
+        month_list.append(date)
+        
+
+    maximum_value = max(amount_list)
+    #print(maximum_value)
+
+    minimum_value = min(amount_list)
+    #print(minimum_value)
+    #mv_abs = abs(minimum_value)
+    #print(mv_abs)
+
     #print(amount_list)
-    new_list = sorted(amount_list, reverse=True)
-    # for i in new_list:
-    #     print(i)
+    #print(month_list)
+    zipped = zip(amount_list,month_list)
 
-maximum_value = max(amount_list)
-minimum_value = min(amount_list)
-#print(minimum_value)
-best_month = ''
-worst_month = ''
+    best_month = ''
+    for i in zipped:
+        if i[0]== maximum_value:
+            best_month = i[1]
+            #print(best_month)
+    
+    worst_month=''
+    for x in zipped:
+        if x[0]== minimum_value:
+            worst_month = x[1]
+            #print(worst_month)
 
-with open(csvpath, 'r') as csv_file:
-    csv_reader = csv.reader(csv_file)
-
-    for line in csv_reader:
-        if line[1]== maximum_value:
-            best_month = (line[0])
-
-
-with open(csvpath, 'r') as csv_file:
-    csv_reader = csv.reader(csv_file)
-
-    for line in csv_reader:
-        if line[1] == minimum_value:
-            worst_month = (line[0])
-
-
-print(best_month)
-print(worst_month)
-print('Greatest Increase in Profits: ' + str(best_month) + '   ' + '${:,.2f}'.format(maximum_value))
-print('Greates Decrease in Profits: ' + str(worst_month) + '   ' + '${:,.2f}'.format(minimum_value)) 
+# print(best_month)
+# print(worst_month)
+print('Greatest Increase in Profits: ' + best_month + '   ' + '${:,.2f}'.format(maximum_value))
+print('Greates Decrease in Profits: ' + worst_month + '   ' + '${:,.2f}'.format(minimum_value)) 
 print('- - - - - - - - - - - - - - - - - - - - - - ')
 
 # Note for the reviewer: please note that the maximum amount in the list is
@@ -140,7 +141,19 @@ print('- - - - - - - - - - - - - - - - - - - - - - ')
 # ------------------------------------------------------------------------------------------------
 # Final step, print the analysis to the terminal and export a text file with the results
 # ------------------------------------------------------------------------------------------------
-# output_path = os.path.join('pybank_analysis.csv')
 
-# with open(output_path, 'w') as csvfile:
-#     ldslfj
+printable_thing = (
+    f'\n- - - - - - - - - - - - - - - - - - - - - - \n'
+    f'\nFinancial Analysis\n'
+    f'\n- - - - - - - - - - - - - - - - - - - - - - \n'
+    f'\nTotal Months: {month_count}\n'
+    f'\nTotal: + str('${:,.2f}'.format(total))\n'
+    f'\nAverage Change: ' + str('${:,.2f}'.format(round(mean(change_list)))))
+f'\nGreatest Increase in Profits: ' + best_month + '   ' + '${:,.2f}'.format(maximum_value))
+f'\nGreates Decrease in Profits: ' + worst_month + '   ' + '${:,.2f}'.format(minimum_value)) 
+f'\n- - - - - - - - - - - - - - - - - - - - - - ')
+)
+
+# output_path = os.path.join('pybank_analysis.txt')
+# with open(output_path, 'w') as txt_file:
+#     txt_file.write(printable_thing)
