@@ -86,8 +86,7 @@ with open(csvpath, 'r') as csv_file:
     print('Average Change: ' + str('${:,.2f}'.format(round(mean(change_list)))))
 
 # ------------------------------------------------------------------------------------------------
-# The greatest increase in profits (date and amount) over the entire period, and 
-# The greatest decrease in losses (date and amount) over the entire period
+# The greatest increase in profits (date and amount) over the entire period
 # ------------------------------------------------------------------------------------------------
 with open(csvpath, 'r') as csv_file:
     csv_reader = csv.reader(csv_file, delimiter=',')
@@ -106,11 +105,6 @@ with open(csvpath, 'r') as csv_file:
     maximum_value = max(amount_list)
     #print(maximum_value)
 
-    minimum_value = min(amount_list)
-    #print(minimum_value)
-    #mv_abs = abs(minimum_value)
-    #print(mv_abs)
-
     #print(amount_list)
     #print(month_list)
     zipped = zip(amount_list,month_list)
@@ -121,39 +115,76 @@ with open(csvpath, 'r') as csv_file:
             best_month = i[1]
             #print(best_month)
     
-    worst_month=''
+# ------------------------------------------------------------------------------------------------
+# The greatest decrease in losses (date and amount) over the entire period
+# ------------------------------------------------------------------------------------------------
+
+with open(csvpath, 'r') as csv_file:
+    csv_reader = csv.reader(csv_file, delimiter=',')
+    next(csv_reader)
+    amount_list = []
+    month_list = []
+    
+    for line in csv_reader:
+        number = int(line[1])
+        amount_list.append(number)
+        date = str(line[0])
+        month_list.append(date)
+        
+    minimum_value = min(amount_list)
+    #print(minimum_value)
+    #mv_abs = abs(minimum_value)
+    #print(mv_abs)
+
+    #print(amount_list)
+    #print(month_list)
+    zipped = zip(amount_list,month_list)
+
+    worst_month = ''
     for x in zipped:
         if x[0]== minimum_value:
             worst_month = x[1]
             #print(worst_month)
 
-# print(best_month)
-# print(worst_month)
+
 print('Greatest Increase in Profits: ' + best_month + '   ' + '${:,.2f}'.format(maximum_value))
-print('Greates Decrease in Profits: ' + worst_month + '   ' + '${:,.2f}'.format(minimum_value)) 
+print('Greatest Decrease in Profits: ' + worst_month + '   ' + '${:,.2f}'.format(minimum_value)) 
 print('- - - - - - - - - - - - - - - - - - - - - - ')
 
 # Note for the reviewer: please note that the maximum amount in the list is
-# 1179593, and not 1926159 as it is is the example code. I triple checked and
-# I'm sure my results are right, so I don't know why it is different to the
-# solution proposed. It would be nice to know where the difference is. Thanks. 
+# $11,79,593, and not $1,926,159 as it is is the example provided in the homework instructions. 
+# I triple checked and I'm sure my results are right, so I don't know why it is different to the
+# solution proposed. It would be nice to know where the difference is or why. Thanks. 
 
 # ------------------------------------------------------------------------------------------------
 # Final step, print the analysis to the terminal and export a text file with the results
 # ------------------------------------------------------------------------------------------------
 
-printable_thing = (
-    f'\n- - - - - - - - - - - - - - - - - - - - - - \n'
-    f'\nFinancial Analysis\n'
-    f'\n- - - - - - - - - - - - - - - - - - - - - - \n'
-    f'\nTotal Months: {month_count}\n'
-    f'\nTotal: + str('${:,.2f}'.format(total))\n'
-    f'\nAverage Change: ' + str('${:,.2f}'.format(round(mean(change_list)))))
-f'\nGreatest Increase in Profits: ' + best_month + '   ' + '${:,.2f}'.format(maximum_value))
-f'\nGreates Decrease in Profits: ' + worst_month + '   ' + '${:,.2f}'.format(minimum_value)) 
-f'\n- - - - - - - - - - - - - - - - - - - - - - ')
-)
+nl = '\n'
+total_f = str('${:,.2f}'.format(total))
+#print(f'total= {total_f}')
+change_list_f = str('${:,.2f}'.format(round(mean(change_list))))
+#print(f'Average change: {change_list_f}')
+maximum_value_f =  str('${:,.2f}'.format(maximum_value))
+#print(f'Maximum: {maximum_value_f}')
+minimum_value_f =  str('${:,.2f}'.format(minimum_value))
+#print(f'Minimum: {minimum_value_f}')
 
-# output_path = os.path.join('pybank_analysis.txt')
-# with open(output_path, 'w') as txt_file:
-#     txt_file.write(printable_thing)
+
+printable_thing = (
+    f'- - - - - - - - - - - - - - - - - - - - - -{nl}'
+    f'Financial Analysis{nl}'
+    f'- - - - - - - - - - - - - - - - - - - - - -{nl}'
+    f'Total Months: {month_count} {nl}'
+    f'Total: {total_f} {nl}'
+    f'Average Change: {change_list_f} {nl}' 
+    f'Greatest Increase in Profits: {best_month} {maximum_value_f} {nl}'
+    f'Greatest Decrease in Profits: {worst_month} {minimum_value_f} {nl}'
+    f'- - - - - - - - - - - - - - - - - - - - - - {nl}'
+    )
+
+#print(printable_thing)
+
+output_path = os.path.join('pybank_analysis.txt')
+with open(output_path, 'w') as txt_file:
+    txt_file.write(printable_thing)
